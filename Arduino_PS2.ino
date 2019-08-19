@@ -49,7 +49,7 @@ if(error == 0){
 }
 
 void Car_Control_A(){
-      //Serial.println(controlMode);
+//      Serial.println(controlMode);
       if(ps2x.Button(PSB_START)){
         //Serial.println("START");
         speed = 120;
@@ -82,8 +82,9 @@ void Car_Control_A(){
       err1 = abs(RX-128);err2 = abs(RY-128);
       //avoid some mistake
       if(err1 >= 3 || err2 >= 3){
+        Serial.println("A");
         angle(RX,RY);
-        for (int i = 0; i<5; i++){
+        for (int i = 0; i<3; i++){
         servo(servoPinA,AngleLeftRight);
         servo(servoPinB,AngleUpDown);
         }
@@ -91,7 +92,7 @@ void Car_Control_A(){
 }
 
 void Car_Control_B(){
-      //Serial.println(controlMode);
+//      Serial.println(controlMode);
       //前进
       if (LY<127){
         speed = 2*(127-LY);
@@ -122,7 +123,7 @@ void Car_Control_B(){
       //avoid some mistake
       if (err1 >= 3 || err2 >= 3){
         angle(RX,RY);
-        for (int i = 0; i<50; i++){
+        for (int i = 0; i<3; i++){
         servo(servoPinA,AngleLeftRight);
         servo(servoPinB,AngleUpDown);
         }        
@@ -145,10 +146,10 @@ void loop(){
     LY=ps2x.Analog(PSS_LY);
     LX=ps2x.Analog(PSS_LX);    
     if (loopCount()){
-      delay(100);
+      delay(200);
       loopCounter++;
       }
-    //Serial.println(RX); 
+    Serial.println(RX); 
     //Serial.println(RX);   
     if(ps2x.ButtonPressed(PSB_TRIANGLE)){
       if (controlMode == 1){controlMode = 2;}
