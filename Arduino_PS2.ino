@@ -49,7 +49,7 @@ if(error == 0){
 }
 
 void Car_Control_A(){
-      Serial.println(controlMode);
+      //Serial.println(controlMode);
       if(ps2x.Button(PSB_START)){
         //Serial.println("START");
         speed = 120;
@@ -91,7 +91,7 @@ void Car_Control_A(){
 }
 
 void Car_Control_B(){
-      Serial.println(controlMode);
+      //Serial.println(controlMode);
       //前进
       if (LY<127){
         speed = 2*(127-LY);
