@@ -51,10 +51,15 @@ if(error == 0){
 void Car_Control_A(){
 //      Serial.println(controlMode);
       if(ps2x.Button(PSB_START)){
-        //Serial.println("START");
-        speed = 120;
-        goAhead(speed);
+        CarState = 1;
         }
+      if (ps2x.Button(PSB_SELECT)){
+        CarState = 0;
+        }
+       if (CarState == 1){
+        //Serial.println("START");
+        speed = 0;
+        halt(speed);
       if(ps2x.Button(PSB_PAD_UP)){
         //Serial.println("up");
         speed = 200;
@@ -75,10 +80,6 @@ void Car_Control_A(){
         speed = 200;
         turnRight(speed);
         }
-      if(ps2x.Button(PSB_SELECT)){
-        speed = 0;
-        halt(speed);  
-        }
       err1 = abs(RX-128);err2 = abs(RY-128);
       //avoid some mistake
       if(err1 >= 3 || err2 >= 3){
@@ -89,10 +90,31 @@ void Car_Control_A(){
         servo(servoPinB,AngleUpDown);
         }
         }
+      if (ps2x.Button(PSB_CIRCLE)){
+        shoot();  
+      }
+      }
+      else {
+        speed = 0;
+        halt(speed);
+        //复位舵机
+        for (int i = 0; i<3; i++){
+        servo(servoPinA,90);
+        servo(servoPinB,90);  
+        }
+      }
 }
-
 void Car_Control_B(){
 //      Serial.println(controlMode);
+      if(ps2x.Button(PSB_START)){
+        CarState = 1;
+        }
+      if (ps2x.Button(PSB_SELECT)){
+        CarState = 0;
+        }
+      if (CarState == 1){
+        speed = 0;
+        halt(speed);
       //前进
       if (LY<127){
         speed = 2*(127-LY);
@@ -130,6 +152,16 @@ void Car_Control_B(){
         }
       if (ps2x.Button(PSB_CIRCLE)){
         shoot();  
+      }                
+      }
+      else {
+        speed = 0;
+        halt(speed);
+        //复位舵机
+        for (int i = 0; i<3; i++){
+        servo(servoPinA,90);
+        servo(servoPinB,90);      
+      }
       }
 }
 
@@ -149,8 +181,8 @@ void loop(){
       delay(200);
       loopCounter++;
       }
-    Serial.println(RX); 
-    //Serial.println(RX);   
+    //Serial.println(RX); 
+    //Serial.println(RY);   
     if(ps2x.ButtonPressed(PSB_TRIANGLE)){
       if (controlMode == 1){controlMode = 2;}
       else {controlMode = 1;}

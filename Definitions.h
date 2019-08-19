@@ -21,6 +21,7 @@ int AngleUpDown;//Up and down, servoB
 int pulsewidth;
 int err1; int err2;
 int loopCounter = 1;
+int CarState = 0;
 
 int loopCount(){
   if (loopCounter == 1){
