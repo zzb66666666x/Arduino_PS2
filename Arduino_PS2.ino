@@ -2,6 +2,7 @@
 #include "Definitions.h"
 
 PS2X ps2x; // create PS2 Controller Class
+RAWDATA PS2data;
 
 void setup(){
 Serial.begin(57600);
@@ -48,121 +49,93 @@ if(error == 0){
 //FINISH SET UP HERE.  
 }
 
-void Car_Control_A(){
-//      Serial.println(controlMode);
-      if(ps2x.Button(PSB_START)){
-        CarState = 1;
-        }
-      if (ps2x.Button(PSB_SELECT)){
-        CarState = 0;
-        }
-       if (CarState == 1){
-        //Serial.println("START");
-        speed = 0;
-        halt(speed);
-      if(ps2x.Button(PSB_PAD_UP)){
-        //Serial.println("up");
-        speed = 200;
-        goAhead(speed);
-        }
-      if(ps2x.Button(PSB_PAD_DOWN)){
-        //Serial.println(DOWN);
-        speed = 200;
-        goBack(speed);
-        }
-      if(ps2x.Button(PSB_PAD_LEFT)){
-        //Serial.println("LEFT");
-        speed = 200;
-        turnLeft(speed);
-        }
-      if(ps2x.Button(PSB_PAD_RIGHT)){
-        //Serial.println("Right");
-        speed = 200;
-        turnRight(speed);
-        }
-      err1 = abs(RX-128);err2 = abs(RY-128);
-      //avoid some mistake
-      if(err1 >= 3 || err2 >= 3){
-        Serial.println("A");
-        angle(RX,RY);
-        for (int i = 0; i<3; i++){
-        servo(servoPinA,AngleLeftRight);
-        servo(servoPinB,AngleUpDown);
-        }
-        }
-      if (ps2x.Button(PSB_CIRCLE)){
-        shoot();  
+void dataFetch(){
+  PS2data.UP = ps2x.Button(PSB_PAD_UP);
+  PS2data.DOWN = ps2x.Button(PSB_PAD_DOWN);
+  PS2data.LEFT = ps2x.Button(PSB_PAD_LEFT);
+  PS2data.RIGHT = ps2x.Button(PSB_PAD_RIGHT);
+  PS2data.CIRCLE = ps2x.Button(PSB_CIRCLE);
+  PS2data.STOP = ps2x.ButtonPressed(PSB_SELECT);
+  PS2data.START = ps2x.ButtonPressed(PSB_START);
+  PS2data.RX = ps2x.Analog(PSS_RX);
+  PS2data.RY = ps2x.Analog(PSS_RY);
+  PS2data.LX = ps2x.Analog(PSS_LX);
+  PS2data.LY = ps2x.Analog(PSS_RY);
+  }
+  
+void Car_Control(){
+  if (PS2data.START){CarState = 1;}
+  else if (PS2data.STOP){CarState = 0;}
+  else {//pass
+  }
+  if (CarState){
+  if ((PS2data.UP || PS2data.DOWN || PS2data.LEFT || PS2data.RIGHT)){
+    if (PS2data.UP){
+      speed = 200;
+      goAhead(speed);
       }
+    if (PS2data.DOWN){
+      speed = 200;
+      goBack(speed);
       }
-      else {
-        speed = 0;
-        halt(speed);
-        //复位舵机
-        for (int i = 0; i<3; i++){
-        servo(servoPinA,90);
-        servo(servoPinB,90);  
-        }
+    if (PS2data.LEFT){
+      speed = 200;
+      turnLeft(speed);      
       }
-}
-void Car_Control_B(){
-//      Serial.println(controlMode);
-      if(ps2x.Button(PSB_START)){
-        CarState = 1;
-        }
-      if (ps2x.Button(PSB_SELECT)){
-        CarState = 0;
-        }
-      if (CarState == 1){
-        speed = 0;
-        halt(speed);
-      //前进
-      if (LY<127){
-        speed = 2*(127-LY);
-        goAhead(speed);
+    if (PS2data.RIGHT){
+      speed = 200;
+      turnRight(speed);      
       }
-      //后退
-      if (LY>127){
-        speed=2*(LY-128);
-        goBack(speed);
-      }
+    }
+  else {
+    if (PS2data.LX < 123){
       //左转
-      if (LX<128){
-        speed = 2*(127-LX);
-        turnLeft(speed);
+      TurnRound = true;
+      speed = 2*(127-PS2data.LX);
+      turnLeft(speed);
       }
+    else if (PS2data.LX > 132){
       //右转
-      if (LX>128){
-              //Serial.println(LX);
-        speed=2*(LX -128);
-        turnRight(speed);
+      TurnRound = true;
+      speed = 2*(PS2data.LX-128);
+      turnLeft(speed);
       }
-      //如果摇杆居中
-      if (LY>=127 && LY<=127 && LX>=128 && LX<=128){
-        speed = 0;
+    else {TurnRound = false;}
+    if (!(TurnRound)){//不需要左右转向
+      if (PS2data.LY < 125){
+        //前进
+        speed = 2*(127-PS2data.LY);
+        goAhead(speed);
+        }
+      else if (PS2data.LY > 130){
+        //后退
+        speed = 2*(PS2data.LY-128);
+        goBack(speed);
+        }
+      else {//摇杆中立
+        speed =0;
         halt(speed);
+        }
       }
-      err1 = abs(RX-128);err2 = abs(RY-128);
-      //avoid some mistake
-      if (err1 >= 3 || err2 >= 3){
-        angle(RX,RY);
-        for (int i = 0; i<3; i++){
+    }
+    if (!(((PS2data.RX >= 123)&&(PS2data.RX <= 132))&&((PS2data.RY >= 123)&&(PS2data.RY <= 132)))){//右摇杆不在中心
+        angle(PS2data.RX,PS2data.RY);
+        for (int i = 0; i<10; i++){
         servo(servoPinA,AngleLeftRight);
         servo(servoPinB,AngleUpDown);
-        }        
         }
-      if (ps2x.Button(PSB_CIRCLE)){
-        shoot();  
-      }                
       }
-      else {
-        speed = 0;
-        halt(speed);
-        //复位舵机
-        for (int i = 0; i<3; i++){
-        servo(servoPinA,90);
-        servo(servoPinB,90);      
+    else{//右摇杆就在中心附近
+      //pass
       }
+    if (PS2data.CIRCLE){
+        shoot();
       }
+  }
+  else {//CarState is 0
+    speed = 0;
+    halt(speed);
+  }
 }
 
 void loop(){  
@@ -172,30 +145,8 @@ void loop(){
    {return;}
   else{
     //DualShock Controller
-    ps2x.read_gamepad(false, vibrate);
-    RY=ps2x.Analog(PSS_RY);
-    RX=ps2x.Analog(PSS_RX);
-    LY=ps2x.Analog(PSS_LY);
-    LX=ps2x.Analog(PSS_LX);    
-    if (loopCount()){
-      delay(200);
-      loopCounter++;
-      }
-    //Serial.println(RX); 
-    //Serial.println(RY);   
-    if(ps2x.ButtonPressed(PSB_TRIANGLE)){
-      if (controlMode == 1){controlMode = 2;}
-      else {controlMode = 1;}
-      }  
-    switch(controlMode)
-    {
-      case 1:
-        Car_Control_A();
-        break;
-      case 2:
-        Car_Control_B();
-        break;
-      default:break;
-     }
+    dataFetch();
+    delay(50);   
+    Car_Control();
   }
 }

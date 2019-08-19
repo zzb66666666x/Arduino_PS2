@@ -6,31 +6,33 @@
 #define speedPinB 9
 #define servoPinA 2
 #define servoPinB 3
+#define false 0
+#define true 1
 
 int speed;
 int error = 0; 
 byte type = 0;
 byte vibrate = 0;
-int controlMode = 1;
-int LY;
-int LX;
-int RY;
-int RX;
 int AngleLeftRight;//Left and right, servoA
 int AngleUpDown;//Up and down, servoB
 int pulsewidth;
 int err1; int err2;
-int loopCounter = 1;
 int CarState = 0;
+int TurnRound;
 
-int loopCount(){
-  if (loopCounter == 1){
-    return 1;
-    }
-  else{
-    return 0;
-    }
-  }
+typedef struct{
+  boolean UP;
+  boolean DOWN;
+  boolean LEFT;
+  boolean RIGHT;
+  boolean CIRCLE; 
+  boolean STOP;
+  boolean START;
+  int LY;
+  int LX;
+  int RY;
+  int RX;
+  }RAWDATA;
 
 void turnLeft(int speed){
   digitalWrite(IN1,HIGH);
@@ -101,3 +103,4 @@ void angle_init(){
     servo(servoPinB,90);
     }
   }
+
