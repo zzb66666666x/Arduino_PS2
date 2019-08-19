@@ -148,7 +148,7 @@ void loop(){
       delay(100);
       loopCounter++;
       }
-    Serial.println(RX); 
+    //Serial.println(RX); 
     //Serial.println(RX);   
     if(ps2x.ButtonPressed(PSB_TRIANGLE)){
       if (controlMode == 1){controlMode = 2;}
