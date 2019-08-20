@@ -81,11 +81,11 @@ void Car_Control(){
       goBack(speed);
       }
     if (PS2data.LEFT){
-      speed = 200;
+      speed = 255;
       turnLeft(speed);      
       }
     if (PS2data.RIGHT){
-      speed = 200;
+      speed = 255;
       turnRight(speed);      
       }
     }
