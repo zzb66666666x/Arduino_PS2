@@ -55,12 +55,13 @@ void dataFetch(){
   PS2data.LEFT = ps2x.Button(PSB_PAD_LEFT);
   PS2data.RIGHT = ps2x.Button(PSB_PAD_RIGHT);
   PS2data.CIRCLE = ps2x.Button(PSB_CIRCLE);
-  PS2data.STOP = ps2x.ButtonPressed(PSB_SELECT);
-  PS2data.START = ps2x.ButtonPressed(PSB_START);
+  PS2data.STOP = ps2x.ButtonPressed(PSB_CROSS);
+  PS2data.START = ps2x.ButtonPressed(PSB_TRIANGLE);
   PS2data.RX = ps2x.Analog(PSS_RX);
   PS2data.RY = ps2x.Analog(PSS_RY);
   PS2data.LX = ps2x.Analog(PSS_LX);
-  PS2data.LY = ps2x.Analog(PSS_RY);
+  PS2data.LY = ps2x.Analog(PSS_LY);
+  //Serial.println("Finished");
   }
   
 void Car_Control(){
@@ -71,6 +72,7 @@ void Car_Control(){
   if (CarState){
   if ((PS2data.UP || PS2data.DOWN || PS2data.LEFT || PS2data.RIGHT)){
     if (PS2data.UP){
+      //Serial.println("UP");
       speed = 200;
       goAhead(speed);
       }
@@ -87,21 +89,21 @@ void Car_Control(){
       turnRight(speed);      
       }
     }
-  else {
-    if (PS2data.LX < 123){
+  else {//由摇杆接管
+    if (PS2data.LX < 100){
       //左转
-      TurnRound = true;
       speed = 2*(127-PS2data.LX);
       turnLeft(speed);
       }
-    else if (PS2data.LX > 132){
+    else if (PS2data.LX > 155){
       //右转
-      TurnRound = true;
       speed = 2*(PS2data.LX-128);
-      turnLeft(speed);
+      turnRight(speed);
       }
-    else {TurnRound = false;}
-    if (!(TurnRound)){//不需要左右转向
+    else {
+      //Don't have to turn around.
+      //Serial.println("Go ahead or back.");
+      //Serial.println(PS2data.LY)
       if (PS2data.LY < 125){
         //前进
         speed = 2*(127-PS2data.LY);
@@ -145,8 +147,10 @@ void loop(){
    {return;}
   else{
     //DualShock Controller
+    ps2x.read_gamepad();
     dataFetch();
-    delay(50);   
+    delay(20);  
+    //Serial.println(PS2data.LX); 
     Car_Control();
   }
 }

@@ -6,8 +6,6 @@
 #define speedPinB 9
 #define servoPinA 2
 #define servoPinB 3
-#define false 0
-#define true 1
 
 int speed;
 int error = 0; 
@@ -18,7 +16,6 @@ int AngleUpDown;//Up and down, servoB
 int pulsewidth;
 int err1; int err2;
 int CarState = 0;
-int TurnRound;
 
 typedef struct{
   boolean UP;
