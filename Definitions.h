@@ -85,8 +85,8 @@ void servo(int Mypin,int Myangle){
   }
 
 void angle(int RX, int RY){
-  AngleLeftRight = map(RX,0,255,0,179);
-  AngleUpDown = map(RY,0,255,60,120);//假设竖直方向上水平对应舵机是90度,往下转角度减小（待修改）。
+  AngleLeftRight = map(RX,0,255,75,125);
+  AngleUpDown = map(RY,0,255,75,105);//假设竖直方向上水平对应舵机是90度,往下转角度减小（待修改）。
   }
 
 void shoot(){
@@ -96,7 +96,7 @@ void shoot(){
 void angle_init(){
   for (int i = 0; i<50; i++){
     //The data need to be justified.
-    servo(servoPinA,90);
+    servo(servoPinA,100);
     servo(servoPinB,90);
     }
   }
