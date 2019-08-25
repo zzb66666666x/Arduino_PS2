@@ -62,7 +62,7 @@ void dataFetch(){
   PS2data.STOP = ps2x.ButtonPressed(PSB_CROSS);
   PS2data.START = ps2x.ButtonPressed(PSB_TRIANGLE);
   PS2data.INIT = ps2x.ButtonPressed(PSB_SQUARE);
-  PS2data.RX = ps2x.Analog(PSS_RX);
+  PS2data.RX = 255-ps2x.Analog(PSS_RX);
   PS2data.RY = ps2x.Analog(PSS_RY);
   PS2data.LX = ps2x.Analog(PSS_LX);
   PS2data.LY = ps2x.Analog(PSS_LY);
