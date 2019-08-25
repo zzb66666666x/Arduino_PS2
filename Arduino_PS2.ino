@@ -131,18 +131,9 @@ void Car_Control(){
         }
     else{//右摇杆就在中心附近
       //检查是否归位
-      if (PS2data.INIT == 1){
+      if (PS2data.INIT){
         angle_init();
-        AngleLR_Pre = AngleLeftRight;
-        AngleUD_Pre = AngleUpDown;
-        AngleLeftRight = 100;
-        AngleUpDown = 90;
         }
-      else {
-        //Maintain the angle last time. 
-        MyservoA.write(AngleLeftRight);
-        MyservoB.write(AngleUpDown);
-        } 
       }
     if (PS2data.CIRCLE){
         shoot();
@@ -155,26 +146,22 @@ void Car_Control(){
 }
 
 void angle_init(){
+  AngleLeftRight = DefaultLRAngle;
+  AngleUpDown = DefaultUDAngle;
   for (int i = 0; i<50; i++){
     //The data need to be justified.
-    MyservoA.write(100);
-    MyservoB.write(90);
+    MyservoA.write(AngleLeftRight);
+    MyservoB.write(AngleUpDown);
     }
   }
   
 void servo(){
   int i,j;
-  if (AngleLR_Pre <= AngleLeftRight){
-    for (i = AngleLR_Pre; i <= AngleLeftRight; i++){MyservoA.write(i);}
+  for (i=0; i<=50; i++){
+    MyservoA.write(AngleLeftRight);
     }
-  else {
-    for (i = AngleLR_Pre; i >= AngleLeftRight; i--){MyservoA.write(i);}
-    }
-  if (AngleUD_Pre <= AngleUpDown){
-    for (j = AngleUD_Pre; j <= AngleUpDown; i++){MyservoB.write(j);}
-    }
-  else {
-    for (j = AngleUD_Pre; j >= AngleUpDown; i--){MyservoB.write(j);}
+  for (j=0; j<=50; j++){
+    MyservoB.write(AngleUpDown);
     }
   }
 

@@ -6,14 +6,15 @@
 #define speedPinB 9
 #define servoPinA 2
 #define servoPinB 3
+#define DefaultLRAngle 100
+#define DefaultUDAngle 90
 
 int speed;
 int error = 0; 
 byte type = 0;
 byte vibrate = 0;
-int AngleLeftRight;//Left and right, servoA
-int AngleUpDown;//Up and down, servoB
-int pulsewidth;
+int AngleLeftRight = 100;//Left and right, servoA
+int AngleUpDown = 90;//Up and down, servoB
 int err1; int err2;
 int CarState = 0;
 
@@ -25,44 +26,45 @@ typedef struct{
   boolean CIRCLE; 
   boolean STOP;
   boolean START;
+  boolean INIT;
   int LY;
   int LX;
   int RY;
   int RX;
   }RAWDATA;
 
-void turnLeft(int speed){
-  digitalWrite(IN1,HIGH);
-  digitalWrite(IN2,LOW);
+void turnRight(int speed){
+  digitalWrite(IN1,LOW);
+  digitalWrite(IN2,HIGH);
   digitalWrite(IN3,LOW);
   digitalWrite(IN4,LOW);
   analogWrite(speedPinA, speed);
   analogWrite(speedPinB, speed);  
   }
 
-void turnRight(int speed){
+void turnLeft(int speed){
   digitalWrite(IN1,LOW);
   digitalWrite(IN2,LOW);
-  digitalWrite(IN3,HIGH);
-  digitalWrite(IN4,LOW);
+  digitalWrite(IN3,LOW);
+  digitalWrite(IN4,HIGH);
   analogWrite(speedPinA, speed);
   analogWrite(speedPinB, speed);
   }
 
 void goAhead(int speed){
-  digitalWrite(IN1,HIGH);
-  digitalWrite(IN2,LOW);
-  digitalWrite(IN3,HIGH);
-  digitalWrite(IN4,LOW);
+  digitalWrite(IN1,LOW);
+  digitalWrite(IN2,HIGH);
+  digitalWrite(IN3,LOW);
+  digitalWrite(IN4,HIGH);
   analogWrite(speedPinA, speed);
   analogWrite(speedPinB, speed);  
   }
 
 void goBack(int speed){
-  digitalWrite(IN1,LOW);
-  digitalWrite(IN2,HIGH);
-  digitalWrite(IN3,LOW);
-  digitalWrite(IN4,HIGH);
+  digitalWrite(IN1,HIGH);
+  digitalWrite(IN2,LOW);
+  digitalWrite(IN3,HIGH);
+  digitalWrite(IN4,LOW);
   analogWrite(speedPinA, speed);
   analogWrite(speedPinB, speed);  
   }
@@ -76,28 +78,15 @@ void halt(int speed){
   analogWrite(speedPinB,speed);
   }
 
-void servo(int Mypin,int Myangle){
-  pulsewidth=(Myangle*11)+500;
-  digitalWrite(Mypin,HIGH);
-  delayMicroseconds(pulsewidth);
-  digitalWrite(Mypin,LOW);
-  delay(20-pulsewidth/1000);
-  }
 
 void angle(int RX, int RY){
   AngleLeftRight = map(RX,0,255,75,125);
-  AngleUpDown = map(RY,0,255,75,105);//假设竖直方向上水平对应舵机是90度,往下转角度减小（待修改）。
+  AngleUpDown = map(RY,0,255,82,98);//假设竖直方向上水平对应舵机是90度,往下转角度减小（待修改）。
   }
 
 void shoot(){
   
   }
 
-void angle_init(){
-  for (int i = 0; i<50; i++){
-    //The data need to be justified.
-    servo(servoPinA,100);
-    servo(servoPinB,90);
-    }
-  }
+
 
