@@ -1,8 +1,10 @@
 #include <PS2X_lib.h>  //for v1.6
 #include "Definitions.h"
-
+#include <Servo.h>
 PS2X ps2x; // create PS2 Controller Class
 RAWDATA PS2data;
+Servo MyservoA;
+Servo MyservoB;
 
 void setup(){
 Serial.begin(57600);
@@ -12,6 +14,8 @@ pinMode(IN3,OUTPUT);
 pinMode(IN4,OUTPUT);
 pinMode(speedPinA,OUTPUT);
 pinMode(speedPinB,OUTPUT);
+MyservoA.attach(servoPinA);//下层左右转动的舵机
+MyservoB.attach(servoPinB);
 delay(300);
 error = ps2x.config_gamepad(12,11,10,13,false,true);   //setup pins and settings:  GamePad(clock, command, attention, data, Pressures?, Rumble?) check for error
 
@@ -57,6 +61,7 @@ void dataFetch(){
   PS2data.CIRCLE = ps2x.Button(PSB_CIRCLE);
   PS2data.STOP = ps2x.ButtonPressed(PSB_CROSS);
   PS2data.START = ps2x.ButtonPressed(PSB_TRIANGLE);
+  PS2data.INIT = ps2x.ButtonPressed(PSB_SQUARE);
   PS2data.RX = ps2x.Analog(PSS_RX);
   PS2data.RY = ps2x.Analog(PSS_RY);
   PS2data.LX = ps2x.Analog(PSS_LX);
@@ -122,13 +127,22 @@ void Car_Control(){
     }
     if (!(((PS2data.RX >= 123)&&(PS2data.RX <= 132))&&((PS2data.RY >= 123)&&(PS2data.RY <= 132)))){//右摇杆不在中心
         angle(PS2data.RX,PS2data.RY);
-        for (int i = 0; i<10; i++){
-        servo(servoPinA,AngleLeftRight);
-        servo(servoPinB,AngleUpDown);
+        servo();
         }
-      }
     else{//右摇杆就在中心附近
-      //pass
+      //检查是否归位
+      if (PS2data.INIT == 1){
+        angle_init();
+        AngleLR_Pre = AngleLeftRight;
+        AngleUD_Pre = AngleUpDown;
+        AngleLeftRight = 100;
+        AngleUpDown = 90;
+        }
+      else {
+        //Maintain the angle last time. 
+        MyservoA.write(AngleLeftRight);
+        MyservoB.write(AngleUpDown);
+        } 
       }
     if (PS2data.CIRCLE){
         shoot();
@@ -139,6 +153,30 @@ void Car_Control(){
     halt(speed);
   }
 }
+
+void angle_init(){
+  for (int i = 0; i<50; i++){
+    //The data need to be justified.
+    MyservoA.write(100);
+    MyservoB.write(90);
+    }
+  }
+  
+void servo(){
+  int i,j;
+  if (AngleLR_Pre <= AngleLeftRight){
+    for (i = AngleLR_Pre; i <= AngleLeftRight; i++){MyservoA.write(i);}
+    }
+  else {
+    for (i = AngleLR_Pre; i >= AngleLeftRight; i--){MyservoA.write(i);}
+    }
+  if (AngleUD_Pre <= AngleUpDown){
+    for (j = AngleUD_Pre; j <= AngleUpDown; i++){MyservoB.write(j);}
+    }
+  else {
+    for (j = AngleUD_Pre; j >= AngleUpDown; i--){MyservoB.write(j);}
+    }
+  }
 
 void loop(){  
   if(error == 1) //skip loop if no controller found
