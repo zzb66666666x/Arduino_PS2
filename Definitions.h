@@ -8,6 +8,9 @@
 #define servoPinB 3
 #define DefaultLRAngle 100
 #define DefaultUDAngle 90
+#define FrictionPulleyA 24 //Left motor.
+#define FrictionPulleyB 25 //Right motor.
+#define M2006Motor 26
 
 int speed;
 int error = 0; 
@@ -27,6 +30,7 @@ typedef struct{
   boolean STOP;
   boolean START;
   boolean INIT;
+  boolean StopShooting;
   int LY;
   int LX;
   int RY;
@@ -85,7 +89,10 @@ void angle(int RX, int RY){
   }
 
 void shoot(){
-  
+   analogWrite(FrictionPulleyA,255);
+   analogWrite(FrictionPulleyA,255);
+   delay(30);
+   analogWrite(M2006Motor,255);
   }
 
 

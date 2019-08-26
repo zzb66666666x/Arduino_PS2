@@ -62,6 +62,7 @@ void dataFetch(){
   PS2data.STOP = ps2x.ButtonPressed(PSB_CROSS);
   PS2data.START = ps2x.ButtonPressed(PSB_TRIANGLE);
   PS2data.INIT = ps2x.ButtonPressed(PSB_SQUARE);
+  PS2data.StopShooting = ps2x.ButtonReleased(PSB_CIRCLE);
   PS2data.RX = 255-ps2x.Analog(PSS_RX);
   PS2data.RY = ps2x.Analog(PSS_RY);
   PS2data.LX = ps2x.Analog(PSS_LX);
@@ -138,9 +139,17 @@ void Car_Control(){
     if (PS2data.CIRCLE){
         shoot();
       }
+    if (PS2data.StopShooting){
+      analogWrite(M2006Motor,0);
+      analogWrite(FrictionPulleyA,0);
+      analogWrite(FrictionPulleyA,0);
+      }
   }
   else {//CarState is 0
     speed = 0;
+    analogWrite(M2006Motor,0);
+    analogWrite(FrictionPulleyA,0);
+    analogWrite(FrictionPulleyA,0);
     halt(speed);
   }
 }
