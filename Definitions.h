@@ -1,16 +1,17 @@
-#define IN1 4
-#define IN2 5
-#define IN3 6
-#define IN4 7
-#define speedPinA 8
-#define speedPinB 9
-#define servoPinA 2
-#define servoPinB 3
+//Change pin definitions for uno
+#define IN1 4 //
+#define IN2 5 //
+#define IN3 6 //
+#define IN4 7 //
+//#define speedPinA 8 //
+//#define speedPinB 9 //
+#define servoPinA 3 //
+#define servoPinB 15 //
 #define DefaultLRAngle 100
 #define DefaultUDAngle 90
-#define FrictionPulleyA 24 //Left motor.
-#define FrictionPulleyB 25 //Right motor.
-#define M2006Motor 26
+//#define FrictionPulleyA 24 //Left motor.
+//#define FrictionPulleyB 25 //Right motor.
+//#define M2006Motor 26
 
 int speed;
 int error = 0; 
@@ -18,7 +19,6 @@ byte type = 0;
 byte vibrate = 0;
 int AngleLeftRight = 100;//Left and right, servoA
 int AngleUpDown = 90;//Up and down, servoB
-int err1; int err2;
 int CarState = 0;
 
 typedef struct{
@@ -42,8 +42,8 @@ void turnRight(int speed){
   digitalWrite(IN2,HIGH);
   digitalWrite(IN3,LOW);
   digitalWrite(IN4,LOW);
-  analogWrite(speedPinA, speed);
-  analogWrite(speedPinB, speed);  
+  //analogWrite(speedPinA, speed);
+  //analogWrite(speedPinB, speed);  
   }
 
 void turnLeft(int speed){
@@ -51,8 +51,8 @@ void turnLeft(int speed){
   digitalWrite(IN2,LOW);
   digitalWrite(IN3,LOW);
   digitalWrite(IN4,HIGH);
-  analogWrite(speedPinA, speed);
-  analogWrite(speedPinB, speed);
+  //analogWrite(speedPinA, speed);
+  //analogWrite(speedPinB, speed);
   }
 
 void goAhead(int speed){
@@ -60,8 +60,8 @@ void goAhead(int speed){
   digitalWrite(IN2,HIGH);
   digitalWrite(IN3,LOW);
   digitalWrite(IN4,HIGH);
-  analogWrite(speedPinA, speed);
-  analogWrite(speedPinB, speed);  
+  //analogWrite(speedPinA, speed);
+  //analogWrite(speedPinB, speed);  
   }
 
 void goBack(int speed){
@@ -69,8 +69,8 @@ void goBack(int speed){
   digitalWrite(IN2,LOW);
   digitalWrite(IN3,HIGH);
   digitalWrite(IN4,LOW);
-  analogWrite(speedPinA, speed);
-  analogWrite(speedPinB, speed);  
+  //analogWrite(speedPinA, speed);
+  //analogWrite(speedPinB, speed);  
   }
 
 void halt(int speed){
@@ -78,8 +78,8 @@ void halt(int speed){
   digitalWrite(IN2,LOW);
   digitalWrite(IN3,LOW);
   digitalWrite(IN4,LOW);  
-  analogWrite(speedPinA,speed);
-  analogWrite(speedPinB,speed);
+  //analogWrite(speedPinA,speed);
+  //analogWrite(speedPinB,speed);
   }
 
 
@@ -89,11 +89,9 @@ void angle(int RX, int RY){
   }
 
 void shoot(){
-   analogWrite(FrictionPulleyA,255);
-   analogWrite(FrictionPulleyA,255);
-   delay(30);
-   analogWrite(M2006Motor,255);
+   //analogWrite(FrictionPulleyA,255);
+   //analogWrite(FrictionPulleyA,255);
+   //delay(30);
+   //analogWrite(M2006Motor,255);
   }
-
-
 

@@ -12,8 +12,10 @@ pinMode(IN1,OUTPUT);
 pinMode(IN2,OUTPUT);
 pinMode(IN3,OUTPUT);
 pinMode(IN4,OUTPUT);
-pinMode(speedPinA,OUTPUT);
-pinMode(speedPinB,OUTPUT);
+//pinMode(speedPinA,OUTPUT);
+//pinMode(speedPinB,OUTPUT);
+pinMode(servoPinA,OUTPUT);
+pinMode(servoPinB,OUTPUT);
 MyservoA.attach(servoPinA);//下层左右转动的舵机
 MyservoB.attach(servoPinB);
 delay(300);
@@ -49,7 +51,7 @@ if(error == 0){
          Serial.println("GuitarHero Controller Found");
        break;
      }
-  angle_init();
+   angle_init();
 //FINISH SET UP HERE.  
 }
 
@@ -98,12 +100,14 @@ void Car_Control(){
   else {//由摇杆接管
     if (PS2data.LX < 100){
       //左转
-      speed = 2*(127-PS2data.LX);
+      //speed = 2*(127-PS2data.LX);
+      speed = 255;
       turnLeft(speed);
       }
     else if (PS2data.LX > 155){
       //右转
-      speed = 2*(PS2data.LX-128);
+      //speed = 2*(PS2data.LX-128);
+      speed = 255;
       turnRight(speed);
       }
     else {
@@ -112,12 +116,14 @@ void Car_Control(){
       //Serial.println(PS2data.LY)
       if (PS2data.LY < 125){
         //前进
-        speed = 2*(127-PS2data.LY);
+        //speed = 2*(127-PS2data.LY);
+        speed = 255;
         goAhead(speed);
         }
       else if (PS2data.LY > 130){
         //后退
-        speed = 2*(PS2data.LY-128);
+        //speed = 2*(PS2data.LY-128);
+        speed = 255;
         goBack(speed);
         }
       else {//摇杆中立
@@ -137,19 +143,19 @@ void Car_Control(){
         }
       }
     if (PS2data.CIRCLE){
-        shoot();
+        //shoot();
       }
     if (PS2data.StopShooting){
-      analogWrite(M2006Motor,0);
-      analogWrite(FrictionPulleyA,0);
-      analogWrite(FrictionPulleyA,0);
+      //analogWrite(M2006Motor,0);
+      //analogWrite(FrictionPulleyA,0);
+      //analogWrite(FrictionPulleyA,0);
       }
   }
   else {//CarState is 0
     speed = 0;
-    analogWrite(M2006Motor,0);
-    analogWrite(FrictionPulleyA,0);
-    analogWrite(FrictionPulleyA,0);
+    //analogWrite(M2006Motor,0);
+    //analogWrite(FrictionPulleyA,0);
+    //analogWrite(FrictionPulleyA,0);
     halt(speed);
   }
 }
