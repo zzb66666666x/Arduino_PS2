@@ -3,22 +3,22 @@
 #define IN2 5 //
 #define IN3 6 //
 #define IN4 7 //
-//#define speedPinA 8 //
-//#define speedPinB 9 //
-#define servoPinA 3 //
+//#define speedPinA 8 
+//#define speedPinB 9 
+#define servoPinA 14 //
 #define servoPinB 15 //
 #define DefaultLRAngle 100
-#define DefaultUDAngle 90
-//#define FrictionPulleyA 24 //Left motor.
-//#define FrictionPulleyB 25 //Right motor.
-//#define M2006Motor 26
+#define DefaultUDAngle 98
+#define FrictionPulleyA 16 //Left motor.
+#define FrictionPulleyB 17 //Right motor.
+//#define SupplyMotor 18
 
 int speed;
 int error = 0; 
 byte type = 0;
 byte vibrate = 0;
-int AngleLeftRight = 100;//Left and right, servoA
-int AngleUpDown = 90;//Up and down, servoB
+int AngleLeftRight = DefaultLRAngle;//Left and right, servoA
+int AngleUpDown = DefaultUDAngle;//Up and down, servoB
 int CarState = 0;
 
 typedef struct{
@@ -30,7 +30,7 @@ typedef struct{
   boolean STOP;
   boolean START;
   boolean INIT;
-  boolean StopShooting;
+  boolean CEASEFIRE;
   int LY;
   int LX;
   int RY;
@@ -85,13 +85,12 @@ void halt(int speed){
 
 void angle(int RX, int RY){
   AngleLeftRight = map(RX,0,255,75,125);
-  AngleUpDown = map(RY,0,255,82,98);//假设竖直方向上水平对应舵机是90度,往下转角度减小（待修改）。
+  AngleUpDown = map(RY,0,255,90,106);//假设竖直方向上水平对应舵机是90度,往下转角度减小（待修改）。
   }
 
 void shoot(){
-   //analogWrite(FrictionPulleyA,255);
-   //analogWrite(FrictionPulleyA,255);
-   //delay(30);
-   //analogWrite(M2006Motor,255);
+   analogWrite(FrictionPulleyA,255);
+   analogWrite(FrictionPulleyA,255);
+   //analogWrite(SupplyMotor,255);
   }
 

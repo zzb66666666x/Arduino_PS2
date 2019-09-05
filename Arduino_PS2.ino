@@ -16,6 +16,8 @@ pinMode(IN4,OUTPUT);
 //pinMode(speedPinB,OUTPUT);
 pinMode(servoPinA,OUTPUT);
 pinMode(servoPinB,OUTPUT);
+pinMode(FrictionPulleyA,OUTPUT);
+pinMode(FrictionPulleyB,OUTPUT);
 MyservoA.attach(servoPinA);//下层左右转动的舵机
 MyservoB.attach(servoPinB);
 delay(300);
@@ -64,7 +66,7 @@ void dataFetch(){
   PS2data.STOP = ps2x.ButtonPressed(PSB_CROSS);
   PS2data.START = ps2x.ButtonPressed(PSB_TRIANGLE);
   PS2data.INIT = ps2x.ButtonPressed(PSB_SQUARE);
-  PS2data.StopShooting = ps2x.ButtonReleased(PSB_CIRCLE);
+  PS2data.CEASEFIRE = ps2x.ButtonReleased(PSB_CIRCLE);
   PS2data.RX = 255-ps2x.Analog(PSS_RX);
   PS2data.RY = ps2x.Analog(PSS_RY);
   PS2data.LX = ps2x.Analog(PSS_LX);
@@ -143,19 +145,19 @@ void Car_Control(){
         }
       }
     if (PS2data.CIRCLE){
-        //shoot();
+        shoot();
       }
-    if (PS2data.StopShooting){
-      //analogWrite(M2006Motor,0);
-      //analogWrite(FrictionPulleyA,0);
-      //analogWrite(FrictionPulleyA,0);
+    if (PS2data.CEASEFIRE){
+      //analogWrite(SupplyMotor,0);
+      analogWrite(FrictionPulleyA,0);
+      analogWrite(FrictionPulleyB,0);
       }
   }
   else {//CarState is 0
     speed = 0;
-    //analogWrite(M2006Motor,0);
-    //analogWrite(FrictionPulleyA,0);
-    //analogWrite(FrictionPulleyA,0);
+    //analogWrite(SupplyMotor,0);
+    analogWrite(FrictionPulleyA,0);
+    analogWrite(FrictionPulleyB,0);
     halt(speed);
   }
 }
