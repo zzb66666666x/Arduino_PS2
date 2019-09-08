@@ -21,6 +21,8 @@ pinMode(FrictionPulleyB,OUTPUT);
 MyservoA.attach(servoPinA);//下层左右转动的舵机
 MyservoB.attach(servoPinB);
 delay(300);
+angle_init();
+SpeedControllerINIT();
 error = ps2x.config_gamepad(12,11,10,13,false,true);   //setup pins and settings:  GamePad(clock, command, attention, data, Pressures?, Rumble?) check for error
 
 if(error == 0){
@@ -53,8 +55,6 @@ if(error == 0){
          Serial.println("GuitarHero Controller Found");
        break;
      }
-   angle_init();
-   SpeedControllerINIT();
 //FINISH SET UP HERE.  
 }
 
