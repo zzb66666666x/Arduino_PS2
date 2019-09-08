@@ -54,6 +54,7 @@ if(error == 0){
        break;
      }
    angle_init();
+   SpeedControllerINIT();
 //FINISH SET UP HERE.  
 }
 
@@ -66,14 +67,29 @@ void dataFetch(){
   PS2data.STOP = ps2x.ButtonPressed(PSB_CROSS);
   PS2data.START = ps2x.ButtonPressed(PSB_TRIANGLE);
   PS2data.INIT = ps2x.ButtonPressed(PSB_SQUARE);
-  PS2data.CEASEFIRE = ps2x.ButtonReleased(PSB_CIRCLE);
   PS2data.RX = 255-ps2x.Analog(PSS_RX);
   PS2data.RY = ps2x.Analog(PSS_RY);
   PS2data.LX = ps2x.Analog(PSS_LX);
   PS2data.LY = ps2x.Analog(PSS_LY);
   //Serial.println("Finished");
   }
-  
+void shoot(){
+  while (1){
+    digitalWrite(FrictionPulleyA,HIGH);
+    digitalWrite(FrictionPulleyB,HIGH);
+    delayMicroseconds(2000);
+    digitalWrite(FrictionPulleyA,LOW);
+    digitalWrite(FrictionPulleyB,LOW);
+    delayMicroseconds(18800);
+    //analogWrite(SupplyMotor,255);
+    ps2x.read_gamepad();
+    if (ps2x.ButtonReleased(PSB_CIRCLE)){
+      digitalWrite(FrictionPulleyA,LOW);
+      digitalWrite(FrictionPulleyB,LOW);      
+      break;
+      }
+    }
+  }  
 void Car_Control(){
   if (PS2data.START){CarState = 1;}
   else if (PS2data.STOP){CarState = 0;}
@@ -147,17 +163,12 @@ void Car_Control(){
     if (PS2data.CIRCLE){
         shoot();
       }
-    if (PS2data.CEASEFIRE){
-      //analogWrite(SupplyMotor,0);
-      analogWrite(FrictionPulleyA,0);
-      analogWrite(FrictionPulleyB,0);
-      }
   }
   else {//CarState is 0
     speed = 0;
     //analogWrite(SupplyMotor,0);
-    analogWrite(FrictionPulleyA,0);
-    analogWrite(FrictionPulleyB,0);
+    digitalWrite(FrictionPulleyA,LOW);
+    digitalWrite(FrictionPulleyB,LOW);
     halt(speed);
   }
 }

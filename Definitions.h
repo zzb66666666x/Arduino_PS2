@@ -30,7 +30,6 @@ typedef struct{
   boolean STOP;
   boolean START;
   boolean INIT;
-  boolean CEASEFIRE;
   int LY;
   int LX;
   int RY;
@@ -88,9 +87,24 @@ void angle(int RX, int RY){
   AngleUpDown = map(RY,0,255,90,106);//假设竖直方向上水平对应舵机是90度,往下转角度减小（待修改）。
   }
 
-void shoot(){
-   analogWrite(FrictionPulleyA,255);
-   analogWrite(FrictionPulleyA,255);
-   //analogWrite(SupplyMotor,255);
+void SpeedControllerINIT(){
+  for(int i=0;i<=1000;i++){
+    digitalWrite(FrictionPulleyA,HIGH);
+    digitalWrite(FrictionPulleyB,HIGH);
+    delayMicroseconds(2000);//高电平持续2000微秒（油门最高点）
+    digitalWrite(FrictionPulleyA,LOW);
+    digitalWrite(FrictionPulleyB,LOW);
+    delayMicroseconds(18000);
+    }
+  for(int i=0;i<=1000;i++){
+    digitalWrite(FrictionPulleyA,HIGH);
+    digitalWrite(FrictionPulleyB,HIGH);
+    delayMicroseconds(1000);//高电平持续1000微秒（油门最低点）
+    digitalWrite(FrictionPulleyA,LOW);
+    digitalWrite(FrictionPulleyB,LOW);
+    delayMicroseconds(19000);
+    }
   }
+
+  
 
