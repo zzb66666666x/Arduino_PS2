@@ -8,10 +8,10 @@
 #define servoPinA 14 //
 #define servoPinB 15 //
 #define DefaultLRAngle 100
-#define DefaultUDAngle 98
+#define DefaultUDAngle 96
 #define FrictionPulleyA 16 //Left motor.
 #define FrictionPulleyB 17 //Right motor.
-//#define SupplyMotor 18
+#define SupplyMotor 18
 
 int speed;
 int error = 0; 
@@ -84,7 +84,7 @@ void halt(int speed){
 
 void angle(int RX, int RY){
   AngleLeftRight = map(RX,0,255,75,125);
-  AngleUpDown = map(RY,0,255,90,106);//假设竖直方向上水平对应舵机是90度,往下转角度减小（待修改）。
+  AngleUpDown = map(RY,0,255,88,104);
   }
 
 void SpeedControllerINIT(){

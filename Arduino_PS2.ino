@@ -77,15 +77,20 @@ void shoot(){
   while (1){
     digitalWrite(FrictionPulleyA,HIGH);
     digitalWrite(FrictionPulleyB,HIGH);
-    delayMicroseconds(2000);
+    delayMicroseconds(1400);
     digitalWrite(FrictionPulleyA,LOW);
     digitalWrite(FrictionPulleyB,LOW);
-    delayMicroseconds(18800);
-    //analogWrite(SupplyMotor,255);
+    delayMicroseconds(18600);
+    digitalWrite(SupplyMotor,HIGH);
     ps2x.read_gamepad();
     if (ps2x.ButtonReleased(PSB_CIRCLE)){
+      digitalWrite(SupplyMotor,LOW);
+      digitalWrite(FrictionPulleyA,HIGH);
+      digitalWrite(FrictionPulleyB,HIGH);
+      delayMicroseconds(1000);//高电平持续2000微秒（油门最高点）
       digitalWrite(FrictionPulleyA,LOW);
-      digitalWrite(FrictionPulleyB,LOW);      
+      digitalWrite(FrictionPulleyB,LOW);
+      delayMicroseconds(19000);     
       break;
       }
     }
@@ -162,6 +167,14 @@ void Car_Control(){
       }
     if (PS2data.CIRCLE){
         shoot();
+      }
+    else{
+      digitalWrite(FrictionPulleyA,HIGH);
+      digitalWrite(FrictionPulleyB,HIGH);
+      delayMicroseconds(1000);//高电平持续2000微秒（油门最高点）
+      digitalWrite(FrictionPulleyA,LOW);
+      digitalWrite(FrictionPulleyB,LOW);
+      delayMicroseconds(19000);      
       }
   }
   else {//CarState is 0
