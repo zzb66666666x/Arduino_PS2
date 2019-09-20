@@ -74,17 +74,17 @@ void dataFetch(){
   //Serial.println("Finished");
   }
 void shoot(){
+  digitalWrite(SupplyMotor,HIGH);
   while (1){
     digitalWrite(FrictionPulleyA,HIGH);
     digitalWrite(FrictionPulleyB,HIGH);
-    delayMicroseconds(1400);
+    delayMicroseconds(1600);
     digitalWrite(FrictionPulleyA,LOW);
     digitalWrite(FrictionPulleyB,LOW);
-    delayMicroseconds(18600);
-    digitalWrite(SupplyMotor,HIGH);
+    delayMicroseconds(18400);
     ps2x.read_gamepad();
     if (ps2x.ButtonReleased(PSB_CIRCLE)){
-      digitalWrite(SupplyMotor,LOW);
+      //digitalWrite(SupplyMotor,LOW);
       digitalWrite(FrictionPulleyA,HIGH);
       digitalWrite(FrictionPulleyB,HIGH);
       delayMicroseconds(1000);//高电平持续2000微秒（油门最高点）
