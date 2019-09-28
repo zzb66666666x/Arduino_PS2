@@ -18,6 +18,8 @@ pinMode(servoPinA,OUTPUT);
 pinMode(servoPinB,OUTPUT);
 pinMode(FrictionPulleyA,OUTPUT);
 pinMode(FrictionPulleyB,OUTPUT);
+pinMode(SupplyMotor,OUTPUT);
+digitalWrite(SupplyMotor,HIGH);
 MyservoA.attach(servoPinA);//下层左右转动的舵机
 MyservoB.attach(servoPinB);
 delay(300);
@@ -76,6 +78,7 @@ void dataFetch(){
 void shoot(){
   digitalWrite(SupplyMotor,HIGH);
   while (1){
+    digitalWrite(SupplyMotor,LOW);
     digitalWrite(FrictionPulleyA,HIGH);
     digitalWrite(FrictionPulleyB,HIGH);
     delayMicroseconds(1600);
@@ -84,7 +87,7 @@ void shoot(){
     delayMicroseconds(18400);
     ps2x.read_gamepad();
     if (ps2x.ButtonReleased(PSB_CIRCLE)){
-      //digitalWrite(SupplyMotor,LOW);
+      digitalWrite(SupplyMotor,HIGH);
       digitalWrite(FrictionPulleyA,HIGH);
       digitalWrite(FrictionPulleyB,HIGH);
       delayMicroseconds(1000);//高电平持续2000微秒（油门最高点）
@@ -169,6 +172,7 @@ void Car_Control(){
         shoot();
       }
     else{
+      digitalWrite(SupplyMotor,HIGH);
       digitalWrite(FrictionPulleyA,HIGH);
       digitalWrite(FrictionPulleyB,HIGH);
       delayMicroseconds(1000);//高电平持续2000微秒（油门最高点）
@@ -179,7 +183,7 @@ void Car_Control(){
   }
   else {//CarState is 0
     speed = 0;
-    //analogWrite(SupplyMotor,0);
+    digitalWrite(SupplyMotor,HIGH);
     digitalWrite(FrictionPulleyA,LOW);
     digitalWrite(FrictionPulleyB,LOW);
     halt(speed);
@@ -190,9 +194,8 @@ void angle_init(){
   AngleLeftRight = DefaultLRAngle;
   AngleUpDown = DefaultUDAngle;
   for (int i = 0; i<50; i++){
-    //The data need to be justified.
-    MyservoA.write(AngleLeftRight);
     MyservoB.write(AngleUpDown);
+    MyservoA.write(AngleLeftRight);
     }
   }
   

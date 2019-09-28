@@ -8,7 +8,7 @@
 #define servoPinA 14 //
 #define servoPinB 15 //
 #define DefaultLRAngle 100
-#define DefaultUDAngle 96
+#define DefaultUDAngle 101
 #define FrictionPulleyA 16 //Left motor.
 #define FrictionPulleyB 17 //Right motor.
 #define SupplyMotor 18
@@ -84,7 +84,7 @@ void halt(int speed){
 
 void angle(int RX, int RY){
   AngleLeftRight = map(RX,0,255,75,125);
-  AngleUpDown = map(RY,0,255,88,104);
+  AngleUpDown = map(RY,0,255,93,109);
   }
 
 void SpeedControllerINIT(){
